@@ -1,0 +1,61 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vector_editor="clr-namespace:vector_editor"
+        xmlns:converters="using:Avalonia.Controls.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="vector_editor.MainWindow"
+        x:DataType="vector_editor:ViewModelBase"
+        Title="vector_editor">
+
+    <Window.Resources>
+        <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" x:Shared="False"/>
+    </Window.Resources>
+
+    <Grid RowDefinitions="100*" ColumnDefinitions="*,200">
+        <Border BorderBrush="Red">
+            <Image x:Name="OutputImage" Stretch="None" />
+        </Border>
+
+        <StackPanel Spacing="16" Margin="16" Grid.Column="1">
+            <TextBlock>Tool</TextBlock>
+
+            <RadioButton GroupName="Tool"
+                    Content="Points" x:Name="PointsRadio"
+                    IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.points}, Mode=TwoWay}" />
+            <RadioButton GroupName="Tool"
+                    Content="Polygonal" x:Name="PolygonalRadio"
+                    IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.polygonal}, Mode=TwoWay}" />
+            <RadioButton GroupName="Tool"
+                    Content="Bezier" x:Name="BezierRadio"
+                    IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.bezier}, Mode=TwoWay}" />
+            <RadioButton GroupName="Tool"
+                    Content="Polygon" x:Name="PolygonRadio"
+                    IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.polygon}, Mode=TwoWay}" />
+           <RadioButton GroupName="Tool"
+                    Content="Ellipse" x:Name="EllipseRadio"
+                    IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.ellipse}, Mode=TwoWay}" />
+
+            <Button Content="New line" Command="{Binding NewLineCommand}" />
+
+            <ColorPicker Color="{Binding Color, Mode=TwoWay}" />
+            <ColorPicker Color="{Binding FillColor, Mode=TwoWay}" />
+
+            <ListBox x:Name="Figures" 
+                    SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                    ItemsSource="{Binding DrawnElements}">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Delete" Command="{Binding DeleteLineCommand}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu> 
+            </ListBox>
+
+            <Button Content="Transform" Command="{Binding TransformCommand}" />
+            <Button Content="Rotate" Command="{Binding RotateCommand}" />
+            <Button Content="Scale" Command="{Binding ScaleCommand}" />
+            <Button Content="Done" Command="{Binding DoneCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>
