@@ -7,6 +7,12 @@ using Avalonia.Controls;
 
 namespace vector_editor
 {
+    public enum MouseButton
+    {
+        Left,
+        Right
+    }
+
     public class ViewModelBase : ReactiveObject
     {
         private Canvas _canvas;
@@ -20,7 +26,8 @@ namespace vector_editor
             RotateCommand = ReactiveCommand.Create(Rotate);
             ScaleCommand = ReactiveCommand.Create(Scale);
             DoneCommand = ReactiveCommand.Create(Done);
-            
+            HandleColorClickCommand = ReactiveCommand.Create<(Color color, MouseButton button)>(HandleColorClick);
+
             // Subscribe to canvas property changes
             this.WhenAnyValue(x => x._canvas.selectedElement)
                 .Subscribe(value => {
@@ -35,6 +42,7 @@ namespace vector_editor
         public ReactiveCommand<Unit, Unit> RotateCommand { get; }
         public ReactiveCommand<Unit, Unit> ScaleCommand { get; }
         public ReactiveCommand<Unit, Unit> DoneCommand { get; }
+        public ReactiveCommand<(Color color, MouseButton button), Unit> HandleColorClickCommand { get; }
 
         private void NewLine()
         {
@@ -110,6 +118,17 @@ namespace vector_editor
                 _canvas.fillColor = value;
                 this.RaisePropertyChanged(nameof(FillColor));
                 NotifyDrawnElementsChanged();
+            }
+        }
+        private void HandleColorClick((Color color, MouseButton button) info)
+        {
+            if (info.button == MouseButton.Left)
+            {
+                Color = info.color;
+            }
+            else if (info.button == MouseButton.Right)
+            {
+                FillColor = info.color;
             }
         }
 
