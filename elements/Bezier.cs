@@ -1,11 +1,13 @@
 using System;
-using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using vector_editor;
 
 public class Bezier: Element {
     public override string _name { get; } = "Bezier";
+
+    public override Elements ElementType => Elements.bezier;
 
     public Bezier(Color color, int id) : base(color, id)
     {

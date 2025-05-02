@@ -2,10 +2,14 @@ using System;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using vector_editor; // Added to access Elements enum
 
 public class Ellipse : Element
 {
     public override string _name { get; } = "Ellipse";
+
+    // Implement ElementType property using the enum
+    public override Elements ElementType => Elements.ellipse;
 
     public Ellipse(Color color, Color fillColor, int id) : base(color, id)
     {

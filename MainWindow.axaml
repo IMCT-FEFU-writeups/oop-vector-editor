@@ -18,8 +18,10 @@
         <DockPanel>
             <Menu>
                 <MenuItem Header="_File">
-                    <MenuItem Header="_Save" Click="AboutMenuItem_Click"/>
-                    <MenuItem Header="_Open" Click="AboutMenuItem_Click"/>
+                    <MenuItem Header="_New" InputGesture="Ctrl+N" Command="{Binding ClearCanvasCommand}" HotKey="Ctrl+O" />
+                    <Separator />
+                    <MenuItem Header="_Save" x:Name="SaveMenuItem" InputGesture="Ctrl+S" HotKey="Ctrl+S" />
+                    <MenuItem Header="_Open" x:Name="OpenMenuItem" InputGesture="Ctrl+O" HotKey="Ctrl+O" />
                 </MenuItem>
 
                 <MenuItem Header="_Help">

@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using vector_editor; // Added to access Elements enum
 
 public class Polygon : Polygonial
 {
     public override string _name { get; } = "Polygon";
+
+    // Implement ElementType property using the enum
+    public override Elements ElementType => Elements.polygon;
 
     public Polygon(Color color, Color _fillColor, int id) : base(color, id)
     {

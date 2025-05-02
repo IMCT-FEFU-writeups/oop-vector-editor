@@ -1,9 +1,10 @@
-using System;
 using System.Collections.Generic;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using vector_editor;
 
 public abstract class Element {
     public virtual string _name { get; } = "Abstract element";
@@ -20,6 +21,34 @@ public abstract class Element {
         this.color = color;
         this.id = id;
     }
+
+    public abstract Elements ElementType { get; }
+
+    public virtual void Save(BinaryWriter writer) {
+        writer.Write(id);
+        writer.Write(points.Count);
+        foreach (var point in points) {
+            writer.Write(point.X);
+            writer.Write(point.Y);
+        }
+        writer.Write(color.ToUint32());
+        writer.Write(fillColor.ToUint32());
+    }
+
+    public virtual void Load(BinaryReader reader) {
+        id = reader.ReadInt32();
+        int pointCount = reader.ReadInt32();
+        points.Clear();
+        for (int i = 0; i < pointCount; i++) {
+            double x = reader.ReadDouble();
+            double y = reader.ReadDouble();
+            points.Add(new Point(x, y));
+        }
+        color = Color.FromUInt32(reader.ReadUInt32());
+        fillColor = Color.FromUInt32(reader.ReadUInt32());
+    }
+
+
     public void DrawPoint(Bitmap renderTarget, DrawingContext ctx, Point pt, Pen pen)
     {
         if (pt.X >= 0 && pt.X < renderTarget.Size.Width && pt.Y >= 0 && pt.Y < renderTarget.Size.Height)

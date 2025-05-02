@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using vector_editor; // Added to access Elements enum
 
 public class Points : Element
 {
     public override string _name { get; } = "Points";
+
+    public override Elements ElementType => Elements.points;
 
     public Points(Color color, int id) : base(color, id)
     {

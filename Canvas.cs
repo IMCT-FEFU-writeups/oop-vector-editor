@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO; // Added for FileStream, BinaryWriter, BinaryReader
+using System.Linq; // Added for Max extension method
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -89,12 +91,12 @@ namespace vector_editor {
             if (selectedEffect != Effects.none) {
                 return;
             }
-            _activeElement?.AddNewPoint(x, y);
+            _activeElement?.AddNewPoint(x + 35, y + 30);
         }
 
         public void OnMouseMove(Point now, Point prev) {
             if (selectedEffect == Effects.none) {
-                _activeElement?.MoveLastPoint((int) now.X + 100, (int) now.Y);
+                _activeElement?.MoveLastPoint((int) now.X + 35, (int) now.Y + 30);
             } else {
                 ApplyEffect(prev, now);
             }
@@ -154,6 +156,81 @@ namespace vector_editor {
 
             if (effect != null && _activeElement != null) {
                 effect.transform(from, to, _activeElement);
+            }
+        }
+
+        public void ClearCanvas() {
+            drawnElements.Clear();
+            lastId = 1;
+            _activeElement = null;
+            _activeElementIndex = 0;
+            CreateNewLine(); 
+        }
+
+        public void SaveDrawnElements(string filePath) {
+            try {
+                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                using (BinaryWriter writer = new BinaryWriter(fs)) {
+                    writer.Write(drawnElements.Count);
+                    foreach (var element in drawnElements) {
+                        writer.Write((int)element.ElementType);
+                        element.Save(writer);
+                    }
+                }
+                Debug.Print($"Elements saved to {filePath}");
+            } catch (Exception ex) {
+                Debug.Print($"Error saving elements: {ex.Message}");
+            }
+        }
+
+        public void LoadDrawnElements(string filePath) {
+            if (!File.Exists(filePath)) {
+                Debug.Print($"File not found: {filePath}");
+                return;
+            }
+
+            try {
+                using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                using (BinaryReader reader = new BinaryReader(fs)) {
+                    int count = reader.ReadInt32();
+                    drawnElements.Clear();
+                    for (int i = 0; i < count; i++) {
+                        Elements elementType = (Elements)reader.ReadInt32(); // Read element type
+                        Element? element = null;
+
+                        // Create instance based on element type
+                        switch (elementType) {
+                            case Elements.points:
+                                element = new Points(Colors.Black, 0); // Placeholder color and id
+                                break;
+                            case Elements.polygonal:
+                                element = new Polygonial(Colors.Black, 0); // Placeholder color and id
+                                break;
+                            case Elements.bezier:
+                                element = new Bezier(Colors.Black, 0); // Placeholder color and id
+                                break;
+                            case Elements.polygon:
+                                element = new Polygon(Colors.Black, Colors.Black, 0); // Placeholder colors and id
+                                break;
+                            case Elements.ellipse:
+                                element = new Ellipse(Colors.Black, Colors.Black, 0); // Placeholder colors and id
+                                break;
+                            default:
+                                Debug.Print($"Unknown element type: {elementType}");
+                                continue; // Skip unknown element
+                        }
+
+                        if (element != null) {
+                            element.Load(reader); // Call virtual Load method
+                            drawnElements.Add(element);
+                        }
+                    }
+                    Debug.Print($"Elements loaded from {filePath}");
+                    // After loading, update lastId to be greater than any loaded element's id
+                    lastId = drawnElements.Count > 0 ? drawnElements.Max(e => e.id) + 1 : 1;
+                }
+            } catch (Exception ex) {
+                Debug.Print($"Error loading elements: {ex.Message}");
             }
         }
     }

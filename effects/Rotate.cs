@@ -9,8 +9,6 @@ public class Rotate : Effect
         var pivot = element.Center();
         double angle = Math.Atan2(to.Y - pivot.Y, to.X - pivot.X) - Math.Atan2(from.Y - pivot.Y, from.X - pivot.X);
 
-        Debug.Print("Angle: {0} radians, Points count: {1}", angle, element.points.Count);
-
         for (int i = 0; i < element.points.Count; ++i)
         {
             Point p = element.points[i];

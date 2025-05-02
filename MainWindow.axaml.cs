@@ -1,14 +1,10 @@
 using System;
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using ReactiveUI;
-
-using Classic.Avalonia;
 using Classic.CommonControls.Dialogs;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -40,6 +36,10 @@ namespace vector_editor {
             OutputImage.AddHandler(PointerPressedEvent, MouseDownHandler, handledEventsToo: true);
             OutputImage.AddHandler(PointerReleasedEvent, MouseUpHandler, handledEventsToo: true);
             OutputImage.AddHandler(PointerMovedEvent, MouseMovedHandler, handledEventsToo: true);
+
+            // Attach event handlers for Save and Open menu items
+            SaveMenuItem.Click += SaveMenuItem_Click;
+            OpenMenuItem.Click += OpenMenuItem_Click;
         }
 
         private void Render() {
@@ -100,9 +100,33 @@ namespace vector_editor {
         {
             await AboutDialog.ShowDialog(this, new AboutDialogOptions()
             {
-                Title = "Avalonia Internet Explorer",
-                Copyright = "Copyleft (R) 2024 bandysc",
+                Title = "Vector editor",
+                Copyright = "Copyleft (or copymiddle, i don't care really)",
             });
+        }
+
+        private async void SaveMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filters.Add(new FileDialogFilter() { Name = "Vector Editor Files", Extensions = { "vec" } });
+            var result = await saveFileDialog.ShowAsync(this);
+
+            if (result != null && DataContext is ViewModelBase viewModel)
+            {
+                viewModel.SaveCommand.Execute(result);
+            }
+        }
+
+        private async void OpenMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filters.Add(new FileDialogFilter() { Name = "Vector Editor Files", Extensions = { "vec" } });
+            var result = await openFileDialog.ShowAsync(this);
+
+            if (result != null && result.Length > 0 && DataContext is ViewModelBase viewModel)
+            {
+                viewModel.LoadCommand.Execute(result[0]);
+            }
         }
     }
 }

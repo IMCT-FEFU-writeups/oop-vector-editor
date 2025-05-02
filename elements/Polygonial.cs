@@ -2,10 +2,13 @@ using System;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using vector_editor;
 
 public class Polygonial : Element
 {
     public override string _name { get; } = "Polygonial";
+
+    public override Elements ElementType => Elements.polygonal;
 
     public Polygonial(Color color, int id) : base(color, id)
     {

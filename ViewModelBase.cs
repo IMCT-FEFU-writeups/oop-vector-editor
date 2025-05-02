@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using Avalonia.Media;
 using System.Reactive;
-using Avalonia.Controls;
+using System.Windows.Input; // Added for ICommand
 
 namespace vector_editor
 {
@@ -26,7 +26,11 @@ namespace vector_editor
             DeleteLineCommand = ReactiveCommand.Create(DeleteLine);
             HandleColorClickCommand = ReactiveCommand.Create<(Color color, MouseButton button)>(HandleColorClick);
 
-            // Subscribe to canvas property changes
+            SaveCommand = ReactiveCommand.Create<string>(SaveCanvas);
+            LoadCommand = ReactiveCommand.Create<string>(LoadCanvas);
+            ClearCanvasCommand = ReactiveCommand.Create(ClearCanvas);
+
+
             this.WhenAnyValue(x => x._canvas.selectedElement)
                 .Subscribe(value => {
                     _selectedElement = value;
@@ -37,6 +41,11 @@ namespace vector_editor
         public ReactiveCommand<Unit, Unit> NewLineCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteLineCommand { get; }
         public ReactiveCommand<(Color color, MouseButton button), Unit> HandleColorClickCommand { get; }
+
+        public ICommand SaveCommand { get; }
+        public ICommand LoadCommand { get; }
+        public ReactiveCommand<Unit, Unit> ClearCanvasCommand { get; }
+
 
         private void NewLine()
         {
@@ -50,25 +59,23 @@ namespace vector_editor
             NotifyDrawnElementsChanged();
         }
 
-        private void Transform()
+        private void SaveCanvas(string filePath)
         {
-            _canvas.selectedEffect = Effects.transform;
+            _canvas.SaveDrawnElements(filePath);
         }
 
-        private void Rotate()
+        private void LoadCanvas(string filePath)
         {
-            _canvas.selectedEffect = Effects.rotate;
+            _canvas.LoadDrawnElements(filePath);
+            NotifyDrawnElementsChanged();
         }
 
-        private void Scale()
+        private void ClearCanvas()
         {
-            _canvas.selectedEffect = Effects.scale;
+            _canvas.ClearCanvas();
+            NotifyDrawnElementsChanged();
         }
 
-        private void Done()
-        {
-            _canvas.selectedEffect = Effects.none;
-        }
 
         public int SelectedIndex
         {
