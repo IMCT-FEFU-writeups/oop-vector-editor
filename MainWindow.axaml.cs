@@ -8,6 +8,11 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using ReactiveUI;
 
+using Classic.Avalonia;
+using Classic.CommonControls.Dialogs;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+
 namespace vector_editor {
     public partial class MainWindow : Window
     {
@@ -91,5 +96,13 @@ namespace vector_editor {
             }
         }
 
+        private async void AboutMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            await AboutDialog.ShowDialog(this, new AboutDialogOptions()
+            {
+                Title = "Avalonia Internet Explorer",
+                Copyright = "Copyleft (R) 2024 bandysc",
+            });
+        }
     }
 }
