@@ -1,19 +1,16 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="vector_editor.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="Option 1"   />
-                <NativeMenuItem Header="Option 2"   />
-                <NativeMenuItemSeparator />
-                <NativeMenuItem Header="Option 3"  />
-            </NativeMenu>
+            <NativeMenuItem Header="About" />
+        </NativeMenu>
     </NativeMenu.Menu>
     <Application.Styles>
-        <FluentTheme />
-        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <ClassicTheme FontAliasing="False" />
+        <StyleInclude Source="avares://Classic.Avalonia.Theme.ColorPicker/Classic.axaml"/>
     </Application.Styles>
 </Application>

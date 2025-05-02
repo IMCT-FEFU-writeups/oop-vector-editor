@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using ReactiveUI;
 
 namespace vector_editor {
@@ -68,5 +69,27 @@ namespace vector_editor {
             }
             _lastPoint = position;
         }
+        private void CellRightClick(object? sender, PointerPressedEventArgs e)
+        {
+            if (sender is Button button && button.Background is ImmutableSolidColorBrush brush)
+            {
+                if (DataContext is ViewModelBase viewModel)
+                {
+                    viewModel.FillColor = brush.Color;
+                }
+            }
+        }
+
+        private void CellLeftClick(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Background is ImmutableSolidColorBrush brush)
+            {
+                if (DataContext is ViewModelBase viewModel)
+                {
+                    viewModel.Color = brush.Color;
+                }
+            }
+        }
+
     }
 }

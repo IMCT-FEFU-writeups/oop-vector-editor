@@ -17,15 +17,13 @@ namespace vector_editor
     {
         private Canvas _canvas;
         private Elements _selectedElement;
+        private Effects _selectedEffect;
         public ViewModelBase (Canvas canvas){
             _canvas = canvas;
             _selectedElement = canvas.selectedElement;
+            _selectedEffect = canvas.selectedEffect;
             NewLineCommand = ReactiveCommand.Create(NewLine);
             DeleteLineCommand = ReactiveCommand.Create(DeleteLine);
-            TransformCommand = ReactiveCommand.Create(Transform);
-            RotateCommand = ReactiveCommand.Create(Rotate);
-            ScaleCommand = ReactiveCommand.Create(Scale);
-            DoneCommand = ReactiveCommand.Create(Done);
             HandleColorClickCommand = ReactiveCommand.Create<(Color color, MouseButton button)>(HandleColorClick);
 
             // Subscribe to canvas property changes
@@ -38,10 +36,6 @@ namespace vector_editor
 
         public ReactiveCommand<Unit, Unit> NewLineCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteLineCommand { get; }
-        public ReactiveCommand<Unit, Unit> TransformCommand { get; }
-        public ReactiveCommand<Unit, Unit> RotateCommand { get; }
-        public ReactiveCommand<Unit, Unit> ScaleCommand { get; }
-        public ReactiveCommand<Unit, Unit> DoneCommand { get; }
         public ReactiveCommand<(Color color, MouseButton button), Unit> HandleColorClickCommand { get; }
 
         private void NewLine()
@@ -73,7 +67,7 @@ namespace vector_editor
 
         private void Done()
         {
-            _canvas.selectedEffect = null;
+            _canvas.selectedEffect = Effects.none;
         }
 
         public int SelectedIndex
@@ -96,6 +90,19 @@ namespace vector_editor
                 NotifyDrawnElementsChanged();
             }
         }
+
+        public Effects SelectedEffect
+        {
+            get => _selectedEffect;
+            set {
+                Console.WriteLine(value);
+                _selectedEffect = value;
+                _canvas.selectedEffect = value;
+                this.RaisePropertyChanged(nameof(SelectedEffect));
+                NotifyDrawnElementsChanged();
+            }
+        }
+
 
         public List<string> DrawnElements
         {

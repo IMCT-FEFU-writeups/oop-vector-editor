@@ -10,7 +10,8 @@ namespace vector_editor {
     public enum Effects {
         transform,
         rotate,
-        scale
+        scale,
+        none
     }
 
     public class Canvas {
@@ -61,7 +62,7 @@ namespace vector_editor {
             }
         }
 
-        public Effects? selectedEffect;
+        public Effects selectedEffect = Effects.none;
 
         public int width = 1;
         public int height = 1;
@@ -85,14 +86,14 @@ namespace vector_editor {
         }
 
         public void OnMouseDown(int x, int y) {
-            if (selectedEffect != null) {
+            if (selectedEffect != Effects.none) {
                 return;
             }
             _activeElement?.AddNewPoint(x, y);
         }
 
         public void OnMouseMove(Point now, Point prev) {
-            if (selectedEffect == null) {
+            if (selectedEffect == Effects.none) {
                 _activeElement?.MoveLastPoint((int) now.X + 100, (int) now.Y);
             } else {
                 ApplyEffect(prev, now);
@@ -147,7 +148,8 @@ namespace vector_editor {
                     effect = new Scale();
                     break;
                 default:
-                throw new Exception();
+                    effect = null;
+                    break;
             }
 
             if (effect != null && _activeElement != null) {
