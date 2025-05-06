@@ -34,4 +34,17 @@ public class Points : Element
 
         points[^1] = new Point(x, y);
     }
+public override string ToSvg()
+    {
+        System.Text.StringBuilder svgBuilder = new System.Text.StringBuilder();
+        string colorHex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        double radius = 2;
+
+        foreach (var point in points)
+        {
+            svgBuilder.Append($"<circle cx=\"{point.X}\" cy=\"{point.Y}\" r=\"{radius}\" fill=\"{colorHex}\" />\n");
+        }
+
+        return svgBuilder.ToString();
+    }
 }

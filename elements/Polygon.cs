@@ -69,4 +69,27 @@ public class Polygon : Polygonial
         }
         base.Render(renderTarget, ctx, true);
     }
+public override string ToSvg()
+    {
+        if (points.Count < 3)
+        {
+            return string.Empty; 
+        }
+
+        System.Text.StringBuilder svgPoints = new System.Text.StringBuilder();
+        foreach (var point in points)
+        {
+            svgPoints.Append($"{point.X},{point.Y} ");
+        }
+
+        string strokeColorHex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        string fillColorHex = "none";
+        if (fillColor.A != 0)
+        {
+            fillColorHex = $"#{fillColor.R:X2}{fillColor.G:X2}{fillColor.B:X2}";
+        }
+        int thickness = 2; 
+
+        return $"<polygon points=\"{svgPoints.ToString().TrimEnd()}\" stroke=\"{strokeColorHex}\" stroke-width=\"{thickness}\" fill=\"{fillColorHex}\" />";
+    }
 }

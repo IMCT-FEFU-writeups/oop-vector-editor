@@ -124,4 +124,35 @@ public class Ellipse : Element
             y += yInc;
         }
     }
+public override string ToSvg()
+    {
+        if (points.Count < 2)
+        {
+            return string.Empty;
+        }
+
+        Point p1 = points[0];
+        Point p2 = points[^1];
+
+        double cx = (p1.X + p2.X) / 2;
+        double cy = (p1.Y + p2.Y) / 2;
+        double rx = Math.Abs(p2.X - p1.X) / 2;
+        double ry = Math.Abs(p2.Y - p1.Y) / 2;
+
+        if (rx <= 0 || ry <= 0) 
+        {
+            return string.Empty;
+        }
+
+        string strokeColorHex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        string fillColorHex = "none";
+        if (fillColor.A != 0)
+        {
+            fillColorHex = $"#{fillColor.R:X2}{fillColor.G:X2}{fillColor.B:X2}";
+        }
+
+        int thickness = 2;
+
+        return $"<ellipse cx=\"{cx}\" cy=\"{cy}\" rx=\"{rx}\" ry=\"{ry}\" stroke=\"{strokeColorHex}\" stroke-width=\"{thickness}\" fill=\"{fillColorHex}\" />";
+    }
 }

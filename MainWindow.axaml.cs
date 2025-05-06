@@ -8,6 +8,9 @@ using ReactiveUI;
 using Classic.CommonControls.Dialogs;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using System.IO;
+using System.Collections.Generic; 
+using System.Threading.Tasks;
 
 namespace vector_editor {
     public partial class MainWindow : Window
@@ -22,7 +25,6 @@ namespace vector_editor {
             var viewModel = new ViewModelBase(_canvas);
             DataContext = viewModel;
 
-            // Subscribe to all property changes in the ViewModel
             viewModel.WhenAnyValue(
                 x => x.SelectedIndex,
                 x => x.SelectedElement,
@@ -37,9 +39,10 @@ namespace vector_editor {
             OutputImage.AddHandler(PointerReleasedEvent, MouseUpHandler, handledEventsToo: true);
             OutputImage.AddHandler(PointerMovedEvent, MouseMovedHandler, handledEventsToo: true);
 
-            // Attach event handlers for Save and Open menu items
             SaveMenuItem.Click += SaveMenuItem_Click;
             OpenMenuItem.Click += OpenMenuItem_Click;
+            ExportSvgMenuItem.Click += ExportSvgMenuItem_Click;
+            ExitMenuItem.Click += ExitMenuItem_Click;
         }
 
         private void Render() {
@@ -127,6 +130,23 @@ namespace vector_editor {
             {
                 viewModel.LoadCommand.Execute(result[0]);
             }
+        }
+
+        private async void ExportSvgMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filters.Add(new FileDialogFilter() { Name = "Scalable vector graphics", Extensions = { "svg" } });
+            var result = await saveFileDialog.ShowAsync(this);
+
+            if (result != null && DataContext is ViewModelBase viewModel)
+            {
+                _canvas.ExportToSvg(result);
+            }
+        }
+
+        private void ExitMenuItem_Click(object? sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

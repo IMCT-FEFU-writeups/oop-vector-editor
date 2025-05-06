@@ -76,4 +76,22 @@ public class Polygonial : Element
             y += yInc;
         }
     }
+public override string ToSvg()
+    {
+        if (points.Count < 2)
+        {
+            return string.Empty;
+        }
+
+        System.Text.StringBuilder svgPoints = new System.Text.StringBuilder();
+        foreach (var point in points)
+        {
+            svgPoints.Append($"{point.X},{point.Y} ");
+        }
+
+        string colorHex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        int thickness = 2; 
+
+        return $"<polyline points=\"{svgPoints.ToString().TrimEnd()}\" stroke=\"{colorHex}\" stroke-width=\"{thickness}\" fill=\"none\" />";
+    }
 }

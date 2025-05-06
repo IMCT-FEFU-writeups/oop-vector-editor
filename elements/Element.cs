@@ -62,6 +62,7 @@ public abstract class Element {
     public abstract void AddNewPoint(int x, int y);
     public abstract void MoveLastPoint(int x, int y);
 
+    public abstract string ToSvg();
     public Point Center() {
         double sumX = 0;
         double sumY = 0;

@@ -50,4 +50,24 @@ public class Bezier: Element {
         points[^1] = new Point(x, y);
         points[^3] = new Point(p.X - (x - p.X), p.Y - (y - p.Y));
     }
+public override string ToSvg()
+    {
+        if (points.Count < 4 || (points.Count - 1) % 3 != 0)
+        {
+            return string.Empty;
+        }
+
+        System.Text.StringBuilder pathData = new System.Text.StringBuilder();
+        pathData.Append($"M {points[0].X},{points[0].Y} ");
+
+        for (int i = 1; i < points.Count; i += 3)
+        {
+            pathData.Append($"C {points[i].X},{points[i].Y} {points[i+1].X},{points[i+1].Y} {points[i+2].X},{points[i+2].Y} ");
+        }
+
+        string colorHex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        int thickness = 2;
+
+        return $"<path d=\"{pathData.ToString().TrimEnd()}\" stroke=\"{colorHex}\" stroke-width=\"{thickness}\" fill=\"none\" />";
+    }
 }

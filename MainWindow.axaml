@@ -22,6 +22,9 @@
                     <Separator />
                     <MenuItem Header="_Save" x:Name="SaveMenuItem" InputGesture="Ctrl+S" HotKey="Ctrl+S" />
                     <MenuItem Header="_Open" x:Name="OpenMenuItem" InputGesture="Ctrl+O" HotKey="Ctrl+O" />
+                    <MenuItem Header="Export as S_VG" x:Name="ExportSvgMenuItem" InputGesture="Ctrl+E" HotKey="Ctrl+E" />
+                    <Separator />
+                    <MenuItem Header="Quit" x:Name="ExitMenuItem" InputGesture="Alt+F4" />
                 </MenuItem>
 
                 <MenuItem Header="_Help">

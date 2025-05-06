@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO; // Added for FileStream, BinaryWriter, BinaryReader
-using System.Linq; // Added for Max extension method
+using System.IO;
+using System.Linq;
+using System.Text;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -233,5 +234,24 @@ namespace vector_editor {
                 Debug.Print($"Error loading elements: {ex.Message}");
             }
         }
+    public void ExportToSvg(string filePath) {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"<svg width=\"{width}\" height=\"{height}\" xmlns=\"http://www.w3.org/2000/svg\">");
+        sb.AppendLine($"  <rect width=\"100%\" height=\"100%\" fill=\"white\"/>");
+
+        foreach (var element in drawnElements) {
+            sb.AppendLine($"  {element.ToSvg()}");
+        }
+
+        sb.AppendLine("</svg>");
+
+        try {
+            File.WriteAllText(filePath, sb.ToString());
+            Debug.Print($"SVG exported to {filePath}");
+        } catch (Exception ex) {
+            Debug.Print($"Error exporting SVG: {ex.Message}");
+        }
+    }
+
     }
 }
