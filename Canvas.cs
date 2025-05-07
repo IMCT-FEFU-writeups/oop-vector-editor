@@ -24,7 +24,7 @@ namespace vector_editor {
         private int _activeElementIndex = 0;
         public int activeElement {
             set {
-                _activeElement = drawnElements[drawnElements.Count - 1];
+                _activeElement = drawnElements[value];
                 _activeElementIndex = value;
             }
             get {
