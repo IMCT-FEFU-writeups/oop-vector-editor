@@ -10,7 +10,8 @@
 	       mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 	       x:Class="vector_editor.MainWindow"
         x:DataType="vector_editor:ViewModelBase"
-        Title="vector_editor">
+        Title="vector_editor"
+        xmlns:avaloniaControls="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls">
  <Window.Resources>
   <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" x:Shared="False"/>
  </Window.Resources>
@@ -55,6 +56,7 @@
                         SmallIcon="/assets/elements/polygon.png"
                         IsToggleButton="true"
                         IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.regularPolygon}, Mode=TwoWay}" />
+                    <avaloniaControls:NumericUpDown Minimum="3" Maximum="12" Value="{Binding RegularPolygonSides, Mode=TwoWay}" Width="60"/>
                     <commonControls:ToolBarButton
                         SmallIcon="/assets/elements/ellipse.png"
                         IsToggleButton="true"

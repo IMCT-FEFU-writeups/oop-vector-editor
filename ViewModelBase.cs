@@ -110,6 +110,14 @@ namespace vector_editor
             }
         }
 
+        public int RegularPolygonSides {
+            get { return _canvas.RegularPolygonSides; }
+            set {
+                if (_canvas.RegularPolygonSides != value) {
+                    _canvas.RegularPolygonSides = value;
+                }
+            }
+        }
 
         public List<string> DrawnElements
         {

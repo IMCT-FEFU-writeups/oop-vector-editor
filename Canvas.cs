@@ -7,6 +7,7 @@ using System.Text;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Classic.CommonControls.Dialogs;
 
 
 namespace vector_editor {
@@ -41,6 +42,14 @@ namespace vector_editor {
                 }
                 _selectedElement = value;
                 CreateNewLine();
+            }
+        }
+
+        private int _regularPolygonSides = 5;
+        public int RegularPolygonSides {
+            get { return _regularPolygonSides; }
+            set {
+                _regularPolygonSides = value;
             }
         }
         private Color _color = Colors.Black;
@@ -118,7 +127,7 @@ namespace vector_editor {
                     _activeElement = new Polygon(_color, _fillColor, lastId++);
                     break;
                 case Elements.regularPolygon:
-                    _activeElement = new RegularPolygon(_color, _fillColor, lastId++, 5);
+                    _activeElement = new RegularPolygon(_color, _fillColor, lastId++, RegularPolygonSides);
                     break;
                 case Elements.ellipse:
                     _activeElement = new Ellipse(_color, _fillColor, lastId++);
