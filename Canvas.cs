@@ -24,7 +24,7 @@ namespace vector_editor {
         private int _activeElementIndex = 0;
         public int activeElement {
             set {
-                _activeElement = drawnElements[value];
+                _activeElement = drawnElements[drawnElements.Count - 1];
                 _activeElementIndex = value;
             }
             get {
@@ -117,8 +117,11 @@ namespace vector_editor {
                 case Elements.polygon:
                     _activeElement = new Polygon(_color, _fillColor, lastId++);
                     break;
+                case Elements.regularPolygon:
+                    _activeElement = new RegularPolygon(_color, _fillColor, lastId++, 5);
+                    break;
                 case Elements.ellipse:
-                _activeElement = new Ellipse(_color, _fillColor, lastId++);
+                    _activeElement = new Ellipse(_color, _fillColor, lastId++);
                     break;
                 default:
                     break;

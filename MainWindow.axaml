@@ -52,6 +52,10 @@
                         IsToggleButton="true"
                         IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.polygon}, Mode=TwoWay}" />
                     <commonControls:ToolBarButton
+                        SmallIcon="/assets/elements/polygon.png"
+                        IsToggleButton="true"
+                        IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.regularPolygon}, Mode=TwoWay}" />
+                    <commonControls:ToolBarButton
                         SmallIcon="/assets/elements/ellipse.png"
                         IsToggleButton="true"
                         IsChecked="{Binding SelectedElement, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static vector_editor:Elements.ellipse}, Mode=TwoWay}" />

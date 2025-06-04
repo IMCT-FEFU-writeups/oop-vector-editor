@@ -6,6 +6,7 @@ namespace vector_editor
         polygonal,
         bezier,
         polygon,
-        ellipse
+        ellipse,
+        regularPolygon,
     }
 } 
