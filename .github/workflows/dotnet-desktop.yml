@@ -7,13 +7,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         configuration: [Release]
-    runs-on: windows-latest
+        os: [windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            platform: win-x64
+          - os: macos-latest
+            platform: osx-arm64
+    
+    runs-on: ${{ matrix.os }}
 
     env:
       Solution_Name: vector-editor.sln                         # Actual solution name
@@ -28,20 +33,37 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    # Add MSBuild to the PATH (Windows only)
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
+      if: matrix.os == 'windows-latest'
 
     # Build the application
     - name: Build the application
-      run: dotnet build $env:Solution_Name --configuration $env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+      shell: bash
+      run: |
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          dotnet build $Solution_Name --configuration ${{ matrix.configuration }}
+        else
+          dotnet build $Solution_Name --configuration ${{ matrix.configuration }}
+        fi
+
+    # Publish the application for specific runtime
+    - name: Publish the application
+      shell: bash
+      run: |
+        dotnet publish $Solution_Name \
+          --configuration ${{ matrix.configuration }} \
+          --runtime ${{ matrix.platform }} \
+          --self-contained true \
+          -p:PublishSingleFile=true \
+          -p:PublishTrimmed=true \
+          -o publish/${{ matrix.platform }}
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Build Output
-        path: bin/${{ matrix.configuration }}
+        name: vector-editor-${{ matrix.platform }}
+        path: publish/${{ matrix.platform }}
